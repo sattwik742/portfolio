@@ -1,7 +1,8 @@
+"use client";
 export default function Home() {
   return (
-    <div className="text-amber-50">
+    <h1 className="text-3xl">
       Hello,World!
-    </div>
+    </h1>
   );
 }
