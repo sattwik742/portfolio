@@ -4,7 +4,6 @@ import Education from "@/components/Custom/Education";
 import Skills from "@/components/Custom/Skills";
 import Certificates from "@/components/Custom/Certificates";
 import Footer from "@/components/Custom/Footer";
-import Projects from "@/components/Custom/Projects";
 import Contact from "@/components/Custom/Contact";
 
 export default function Home() {
