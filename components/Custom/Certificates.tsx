@@ -3,8 +3,8 @@
 import React from "react";
 import { motion, useMotionValue, useMotionTemplate } from "framer-motion";
 import { ExternalLink } from "lucide-react";
-// Importing brand-specific icons
-import { SiGoogle, SiCoursera, SiHackerrank, SiPython, SiSqlite, SiCss3 } from "react-icons/si";
+// Fixed: Changed SiCss3 to SiCss directly to match the library's exports
+import { SiGoogle, SiCoursera, SiHackerrank, SiCss } from "react-icons/si";
 
 const certificates = [
   {
@@ -12,7 +12,6 @@ const certificates = [
     issuer: "Google",
     partner: "Coursera",
     date: "22nd April 2024",
-    // We use a combination or the main brand icon
     icon: <SiGoogle className="w-5 h-5" />,
     brandColor: "group-hover:text-blue-500",
     link: "https://www.coursera.org/account/accomplishments/certificate/CTHXMTAKAFKT",
@@ -31,7 +30,8 @@ const certificates = [
     title: "CSS (Basic) Certificate",
     issuer: "HackerRank",
     date: "08 Dec 2024",
-    icon: <SiHackerrank className="w-5 h-5" />,
+    // Reference updated to SiCss
+    icon: <SiCss className="w-5 h-5" />,
     brandColor: "group-hover:text-green-500",
     link: "https://www.hackerrank.com/certificates/fb11cbbd3c44",
     description: "Covers CSS Cascading, Inheritance, text styling, and modern layout box modeling."
@@ -56,7 +56,6 @@ const CertificateCard = ({ cert }: { cert: typeof certificates[0] }) => {
       onMouseMove={handleMouseMove}
       className="group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-white/10 bg-zinc-950/50 p-8 transition-all duration-500 hover:border-white/20"
     >
-      {/* Interactive Spotlight Effect */}
       <motion.div
         className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100"
         style={{
@@ -128,7 +127,6 @@ const CertificateCard = ({ cert }: { cert: typeof certificates[0] }) => {
 export default function Certificates() {
   return (
     <section id="certificates" className="relative py-32 bg-black overflow-hidden border-t border-zinc-900">
-      {/* Background Pattern */}
       <div className="absolute inset-0 z-0">
         <div
           className="absolute inset-0 opacity-[0.02]"
