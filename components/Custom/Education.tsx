@@ -6,11 +6,17 @@ import { GraduationCap, Calendar, MapPin, ChevronDown, BookOpen, CheckCircle2 } 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
+// Define strict interfaces for your data
+interface EducationItem {
+  degree: string;
+  institution: string;
+  duration: string;
+  location: string;
+  image: string;
+  modules: string[];
 }
 
-const educationData = [
+const educationData: EducationItem[] = [
   {
     degree: "Master of Computer Applications (MCA)",
     institution: "KIIT School of Computer Applications",
@@ -25,7 +31,7 @@ const educationData = [
     duration: "2022 - 2025",
     location: "Kolkata, West Bengal",
     image: "https://images.pexels.com/photos/1205651/pexels-photo-1205651.jpeg",
-    modules: ["Data Structures", "DBMS", "Computer Networks", "UNIX Operating System",]
+    modules: ["Data Structures", "DBMS", "Computer Networks", "UNIX Operating System"]
   },
   {
     degree: "Higher Secondary (12th Grade)",
@@ -59,7 +65,7 @@ const CustomCursor = ({ isHovering }: { isHovering: boolean }) => {
       className="fixed top-0 left-0 w-12 h-12 rounded-full border border-white/40 pointer-events-none z-[9999] mix-blend-difference flex items-center justify-center -ml-6 -mt-6"
       animate={{ 
         scale: isHovering ? 1.5 : 0.8, 
-        backgroundColor: isHovering ? "rgba(255, 255, 255, 1)" : "rgba(255, 255, 255, 0)",
+        backgroundColor: isHovering ? "white" : "transparent",
       }}
     >
       {isHovering && <BookOpen className="w-4 h-4 text-black" />}
@@ -67,16 +73,19 @@ const CustomCursor = ({ isHovering }: { isHovering: boolean }) => {
   );
 };
 
-const EducationCard = ({ edu, index, setGlobalHover }: any) => {
+const EducationCard = ({ edu, index, setGlobalHover }: { edu: EducationItem, index: number, setGlobalHover: (val: boolean) => void }) => {
   const [isOpen, setIsOpen] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Register plugin inside useEffect to ensure it only runs on the client
+    gsap.registerPlugin(ScrollTrigger);
+    
     const ctx = gsap.context(() => {
-      if (imgRef.current) {
+      if (imgRef.current && cardRef.current) {
         gsap.to(imgRef.current, {
-          yPercent: 20,
+          yPercent: 15, // Reduced intensity for smoother feel
           ease: "none",
           scrollTrigger: {
             trigger: cardRef.current,
@@ -104,34 +113,37 @@ const EducationCard = ({ edu, index, setGlobalHover }: any) => {
         onMouseEnter={() => setGlobalHover(true)}
         onMouseLeave={() => setGlobalHover(false)}
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full md:w-[46%] relative rounded-3xl overflow-hidden border border-white/10 bg-zinc-900/50 backdrop-blur-sm group cursor-none transition-colors duration-500 hover:border-white/30 z-10"
+        className="group relative z-10 w-full cursor-none overflow-hidden rounded-3xl border border-white/10 bg-zinc-900/50 backdrop-blur-sm transition-colors duration-500 hover:border-white/30 md:w-[46%]"
       >
         {/* Parallax Image Background */}
         <div 
           ref={imgRef} 
-          className="absolute inset-0 w-full h-[140%] -top-[20%] opacity-20 grayscale group-hover:grayscale-0 group-hover:opacity-40 transition-all duration-1000 bg-cover bg-center pointer-events-none" 
+          className="absolute inset-0 -top-[15%] h-[130%] w-full bg-cover bg-center opacity-20 grayscale transition-all duration-1000 group-hover:opacity-40 group-hover:grayscale-0 pointer-events-none" 
           style={{ backgroundImage: `url(${edu.image})` }} 
         />
         
-        {/* Gradient Overlay - Fixed syntax */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
+        {/* Fixed Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/90 to-transparent pointer-events-none" />
 
-        <div className="relative p-8 md:p-10 z-20">
-          <div className="flex justify-between items-start mb-12">
-            <div className="p-3 bg-white/10 rounded-2xl border border-white/10 backdrop-blur-md">
-              <GraduationCap className="w-5 h-5 text-white" />
+        <div className="relative z-20 p-8 md:p-10">
+          <div className="mb-12 flex items-start justify-between">
+            <div className="rounded-2xl border border-white/10 bg-white/10 p-3 backdrop-blur-md">
+              <GraduationCap className="h-5 w-5 text-white" />
             </div>
-            <motion.div animate={{ rotate: isOpen ? 180 : 0 }} className="p-2 rounded-full bg-white/5 border border-white/5">
-              <ChevronDown className="w-4 h-4 text-zinc-400" />
+            <motion.div 
+              animate={{ rotate: isOpen ? 180 : 0 }} 
+              className="rounded-full border border-white/5 bg-white/5 p-2"
+            >
+              <ChevronDown className="h-4 w-4 text-zinc-400" />
             </motion.div>
           </div>
 
-          <h3 className="text-xl md:text-2xl font-bold text-white mb-2 leading-tight">{edu.degree}</h3>
-          <p className="text-zinc-400 text-xs font-semibold uppercase tracking-widest mb-6">{edu.institution}</p>
+          <h3 className="mb-2 text-xl font-bold leading-tight text-white md:text-2xl">{edu.degree}</h3>
+          <p className="mb-6 text-xs font-semibold uppercase tracking-widest text-zinc-400">{edu.institution}</p>
 
-          <div className="flex gap-4 text-[10px] text-zinc-500 font-bold uppercase tracking-tight">
-            <span className="flex items-center gap-1.5"><Calendar className="w-3 h-3" /> {edu.duration}</span>
-            <span className="flex items-center gap-1.5"><MapPin className="w-3 h-3" /> {edu.location}</span>
+          <div className="flex gap-4 font-bold uppercase tracking-tight text-zinc-500 text-[10px]">
+            <span className="flex items-center gap-1.5"><Calendar className="h-3 w-3" /> {edu.duration}</span>
+            <span className="flex items-center gap-1.5"><MapPin className="h-3 w-3" /> {edu.location}</span>
           </div>
 
           <AnimatePresence>
@@ -143,16 +155,16 @@ const EducationCard = ({ edu, index, setGlobalHover }: any) => {
                 transition={{ duration: 0.4, ease: "circOut" }}
                 className="overflow-hidden"
               >
-                <div className="pt-8 mt-8 border-t border-white/5 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {edu.modules.map((module: string, i: number) => (
+                <div className="mt-8 grid grid-cols-1 gap-3 border-t border-white/5 pt-8 sm:grid-cols-2">
+                  {edu.modules.map((module, i) => (
                     <motion.div 
                       key={i}
                       initial={{ x: -10, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
                       transition={{ delay: i * 0.05 }}
-                      className="flex items-center gap-2 text-[10px] text-zinc-300 font-medium"
+                      className="flex items-center gap-2 font-medium text-zinc-300 text-[10px]"
                     >
-                      <CheckCircle2 className="w-3 h-3 text-white/40" />
+                      <CheckCircle2 className="h-3 w-3 text-white/40" />
                       {module}
                     </motion.div>
                   ))}
@@ -163,7 +175,7 @@ const EducationCard = ({ edu, index, setGlobalHover }: any) => {
         </div>
       </motion.div>
       
-      <div className="hidden md:block w-[46%]" />
+      <div className="hidden md:block md:w-[46%]" />
     </div>
   );
 };
@@ -180,31 +192,31 @@ export default function Education() {
   const scaleY = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
   return (
-    <section ref={containerRef} className="py-40 bg-black text-white relative w-full overflow-hidden min-h-screen">
+    <section ref={containerRef} className="relative min-h-screen w-full overflow-hidden bg-black py-40 text-white">
       <CustomCursor isHovering={isHovering} />
       
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
+      <div className="pointer-events-none absolute inset-0 opacity-[0.03]" 
            style={{ backgroundImage: 'radial-gradient(white 1px, transparent 0)', backgroundSize: '30px 30px' }} />
 
-      <div className="max-w-6xl mx-auto px-6 relative z-10">
+      <div className="relative z-10 mx-auto max-w-6xl px-6">
         <header className="mb-32 text-center md:text-left">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-6xl font-bold tracking-tight"
+            className="text-4xl font-bold tracking-tight md:text-6xl"
           >
             Education
           </motion.h2>
-          <p className="text-zinc-500 mt-2 text-sm">My academic timeline and core specializations.</p>
+          <p className="mt-2 text-sm text-zinc-500">My academic timeline and core specializations.</p>
         </header>
 
         <div className="relative">
           {/* Vertical Timeline Line */}
           <motion.div 
             style={{ scaleY }} 
-            className="absolute left-1/2 top-0 bottom-0 w-px bg-zinc-800 origin-top -translate-x-1/2 hidden md:block z-0" 
+            className="absolute left-1/2 top-0 bottom-0 z-0 hidden w-px origin-top -translate-x-1/2 bg-zinc-800 md:block" 
           />
           
           <div className="relative z-10">
