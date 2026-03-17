@@ -3,7 +3,7 @@
 import React from "react";
 import { motion, useMotionValue, useMotionTemplate } from "framer-motion";
 import { ExternalLink } from "lucide-react";
-// Fixed: Changed SiCss3 to SiCss directly to match the library's exports
+// FIXED: Removed SiPython, SiSqlite, and changed SiCss3 to SiCss
 import { SiGoogle, SiCoursera, SiHackerrank, SiCss } from "react-icons/si";
 
 const certificates = [
@@ -30,7 +30,7 @@ const certificates = [
     title: "CSS (Basic) Certificate",
     issuer: "HackerRank",
     date: "08 Dec 2024",
-    // Reference updated to SiCss
+    // FIXED: Using SiCss instead of SiCss3
     icon: <SiCss className="w-5 h-5" />,
     brandColor: "group-hover:text-green-500",
     link: "https://www.hackerrank.com/certificates/fb11cbbd3c44",
