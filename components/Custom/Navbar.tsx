@@ -42,18 +42,16 @@ export default function Navbar() {
       <motion.div
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className={`w-full max-w-6xl flex items-center justify-between px-6 py-3 transition-all duration-500 rounded-full border pointer-events-auto ${
-          scrolled ? "bg-black/60 backdrop-blur-2xl border-white/10 shadow-2xl" : "bg-transparent border-transparent"
-        }`}
+        className={`w-full max-w-6xl flex items-center justify-between px-6 py-3 transition-all duration-500 rounded-full border pointer-events-auto ${scrolled ? "bg-black/60 backdrop-blur-2xl border-white/10 shadow-2xl" : "bg-transparent border-transparent"
+          }`}
       >
         <Link href="/" className="flex items-center gap-2 group text-white">
-          <Code2 size={24} className="transition-transform group-hover:rotate-12" />
-          <span className="font-bold tracking-tighter text-xl font-[family-name:var(--font-space-grotesk)]">SATTWIK</span>
+          <span className="font-bold tracking-tighter text-xl font-space-grotesk">SATTWIK</span>
         </Link>
 
         <div className="hidden md:flex items-center gap-4">
           {NAV_LINKS.map(({ name, href }) => (
-            <Link key={name} href={href} className="px-3 py-1.5 text-sm font-medium text-zinc-400 hover:text-white transition-colors font-[family-name:var(--font-outfit)]">
+            <Link key={name} href={href} className="px-3 py-1.5 text-sm font-medium text-zinc-400 hover:text-white transition-colors font-font-outfit">
               {name}
             </Link>
           ))}
@@ -81,7 +79,7 @@ export default function Navbar() {
           >
             {NAV_LINKS.map(({ name, href }, i) => (
               <motion.div key={name} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
-                <Link href={href} onClick={() => setIsOpen(false)} className="text-4xl font-bold text-white hover:text-zinc-400 transition-colors font-[family-name:var(--font-outfit)]">
+                <Link href={href} onClick={() => setIsOpen(false)} className="text-4xl font-bold text-white hover:text-zinc-400 transition-colors font-outfit">
                   {name}
                 </Link>
               </motion.div>

@@ -1,219 +1,218 @@
 "use client";
 
-import React, { useRef } from "react";
-import { 
-  motion, 
-  useScroll, 
-  useTransform, 
-  useMotionValue, 
-  useMotionTemplate,
-  useSpring,
+import React from "react";
+import {
+  motion,
+  useMotionValue,
+  useTransform,
+  useMotionTemplate
 } from "framer-motion";
-import { 
-  Layout, 
-  Database, 
-  Terminal, 
-  Cpu, 
-  Sparkles,
+import {
+  Layout,
+  Database,
+  Terminal,
+  Code2,
+  Cloud,
+  Server
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-const getIconUrl = (slug: string) => `https://cdn.simpleicons.org/${slug}`;
-
-// Floating element component for the background
-const FloatingObject = ({ delay, duration, size, top, left, color }: any) => {
-  return (
-    <motion.div
-      initial={{ y: 0 }}
-      animate={{ y: [-20, 20, -20] }}
-      transition={{
-        duration: duration,
-        repeat: Infinity,
-        delay: delay,
-        ease: "easeInOut",
-      }}
-      className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-      style={{
-        width: size,
-        height: size,
-        top: top,
-        left: left,
-        backgroundColor: color,
-      }}
-    />
-  );
-};
+// Optimized Icon Fetching - Using slugs that match simpleicons.org
+const getIconUrl = (slug: string) => `https://cdn.simpleicons.org/${slug}/e5e7eb`;
 
 const skillCategories = [
   {
+    title: "Languages",
+    icon: <Code2 className="w-5 h-5 text-white" />,
+    // description: "The core syntax and logic that power every solution.",
+    skills: [
+      { name: "JavaScript", slug: "javascript" },
+      { name: "Python", slug: "python" },
+      { name: "Java", slug: "openJdk" },
+    ],
+    className: "lg:col-span-1",
+  },
+  {
     title: "Frontend",
-    icon: <Layout className="w-5 h-5" />,
-    description: "Architecting visual logic and fluid user interfaces.",
+    icon: <Layout className="w-5 h-5 text-white" />,
+    // description: "Architecting visual logic and fluid user interfaces with modern frameworks.",
     skills: [
       { name: "HTML5", slug: "html5" },
       { name: "CSS", slug: "css" },
-      { name: "JavaScript", slug: "javascript" },
       { name: "Tailwind", slug: "tailwindcss" },
-      { name: "React", slug: "react" }
     ],
-    accent: "from-blue-500/20 to-cyan-500/20",
-    glow: "#0070f3",
-    className: "lg:col-span-2 lg:row-span-1"
+    className: "lg:col-span-2",
   },
   {
-    title: "Backend & Cloud",
-    icon: <Database className="w-5 h-5" />,
-    description: "Building resilient server architectures and data pipelines.",
+    title: "Backend",
+    icon: <Server className="w-5 h-5 text-white" />,
+    // description: "Building resilient server architectures and API services.",
     skills: [
       { name: "Node.js", slug: "nodedotjs" },
-      { name: "MongoDB", slug: "mongodb" },
-      { name: "Express", slug: "express" },
-      { name: "Firebase", slug: "firebase" }
     ],
-    accent: "from-purple-500/20 to-pink-500/20",
-    glow: "#7928ca",
-    className: "lg:col-span-1 lg:row-span-2"
+    className: "lg:col-span-1",
   },
   {
-    title: "Systems & DevOps",
-    icon: <Terminal className="w-5 h-5" />,
-    description: "Environment automation and version integrity.",
+    title: "Database",
+    icon: <Database className="w-5 h-5 text-white" />,
+    // description: "Management of relational and non-relational data structures.",
+    skills: [
+      { name: "MongoDB", slug: "mongodb" },
+      { name: "MySQL", slug: "mysql" },
+    ],
+    className: "lg:col-span-2",
+  },
+  {
+    title: "Deployment",
+    icon: <Cloud className="w-5 h-5 text-white" />,
+    // description: "Scalable infrastructure and containerized orchestration.",
+    skills: [
+      { name: "Vercel", slug: "vercel" },
+    ],
+    className: "lg:col-span-2",
+  },
+  {
+    title: "Systems",
+    icon: <Terminal className="w-5 h-5 text-white" />,
+    // description: "Environment automation and version integrity.",
     skills: [
       { name: "Git", slug: "git" },
-      { name: "Ubuntu", slug: "ubuntu" },
-      { name: "Arch", slug: "archlinux" },
-      { name: "Vim", slug: "vim"}
+      { name: "Linux", slug: "linux" },
+      { name: "Bash", slug: "gnubash" },
     ],
-    accent: "from-pink-500/20 to-rose-500/20",
-    glow: "#ff0080",
-    className: "lg:col-span-1 lg:row-span-1"
-  },
-  {
-    title: "Core Stack",
-    icon: <Cpu className="w-5 h-5" />,
-    description: "Deep-level algorithms and relational systems.",
-    skills: [
-      { name: "Java", slug: "openjdk" },
-      { name: "SQL", slug: "mysql" }
-    ],
-    accent: "from-orange-500/20 to-yellow-500/20",
-    glow: "#f5a623",
-    className: "lg:col-span-2 lg:row-span-1"
+    className: "lg:col-span-1",
   }
 ];
 
+const BackgroundGradient = ({
+  children,
+  className,
+  containerClassName,
+}: {
+  children?: React.ReactNode;
+  className?: string;
+  containerClassName?: string;
+}) => {
+  const variants = {
+    initial: { backgroundPosition: "0 50%" },
+    animate: { backgroundPosition: ["0, 50%", "100% 50%", "0 50%"] },
+  };
+  return (
+    <div className={cn("relative p-px group", containerClassName)}>
+      <motion.div
+        variants={variants}
+        initial="initial"
+        animate="animate"
+        transition={{ duration: 5, repeat: Infinity, repeatType: "reverse" }}
+        style={{ backgroundSize: "400% 400%" }}
+        className={cn(
+          "absolute inset-0 rounded-3xl z-1 opacity-40 group-hover:opacity-100 blur-xl transition duration-500",
+          "bg-[radial-gradient(circle_farthest-side_at_0_100%,#ffffff,transparent),radial-gradient(circle_farthest-side_at_100%_0%,#404040,transparent),radial-gradient(circle_farthest-side_at_100%_100%,#71717a,transparent),radial-gradient(circle_farthest-side_at_0_0%,#ffffff,#18181b)]"
+        )}
+      />
+      <motion.div
+        variants={variants}
+        initial="initial"
+        animate="animate"
+        transition={{ duration: 5, repeat: Infinity, repeatType: "reverse" }}
+        style={{ backgroundSize: "400% 400%" }}
+        className={cn(
+          "absolute inset-0 rounded-3xl z-1",
+          "bg-[radial-gradient(circle_farthest-side_at_0_100%,#ffffff,transparent),radial-gradient(circle_farthest-side_at_100%_0%,#404040,transparent),radial-gradient(circle_farthest-side_at_100%_100%,#71717a,transparent),radial-gradient(circle_farthest-side_at_0_0%,#ffffff,#18181b)]"
+        )}
+      />
+      <div className={cn("relative z-10", className)}>{children}</div>
+    </div>
+  );
+};
+
 const SkillCard = ({ category }: { category: typeof skillCategories[0] }) => {
-  const cardRef = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  const rotateX = useSpring(useTransform(mouseY, [-100, 100], [10, -10]), { stiffness: 100, damping: 30 });
-  const rotateY = useSpring(useTransform(mouseX, [-100, 100], [-10, 10]), { stiffness: 100, damping: 30 });
-
-  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    mouseX.set(x);
-    mouseY.set(y);
+  function onMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
+    let { left, top, width, height } = currentTarget.getBoundingClientRect();
+    mouseX.set((clientX - left) / width - 0.5);
+    mouseY.set((clientY - top) / height - 0.5);
   }
 
-  const spotlight = useMotionTemplate`
-    radial-gradient(
-      400px circle at ${useTransform(mouseX, (v) => v + (cardRef.current?.offsetWidth || 0) / 2)}px 
-      ${useTransform(mouseY, (v) => v + (cardRef.current?.offsetHeight || 0) / 2)}px,
-      ${category.glow}15,
-      transparent 80%
-    )
-  `;
+  const maskImage = useMotionTemplate`radial-gradient(200px circle at ${useTransform(mouseX, [-0.5, 0.5], ["0%", "100%"])} ${useTransform(mouseY, [-0.5, 0.5], ["0%", "100%"])}, white, transparent)`;
 
   return (
-    <motion.div
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={() => { mouseX.set(0); mouseY.set(0); }}
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-      className={`group relative rounded-[2.5rem] border border-white/10 bg-zinc-900/40 backdrop-blur-xl p-8 md:p-10 transition-all duration-500 hover:border-white/20 ${category.className}`}
-    >
-      <motion.div className="pointer-events-none absolute -inset-px rounded-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: spotlight }} />
+    <BackgroundGradient containerClassName={category.className}>
+      <div
+        onMouseMove={onMouseMove}
+        onMouseLeave={() => { mouseX.set(0); mouseY.set(0); }}
+        className="relative flex h-full flex-col justify-between overflow-hidden rounded-[23px] bg-zinc-950 p-8"
+      >
+        <motion.div
+          className="pointer-events-none absolute inset-0 bg-white/5 opacity-0 transition-opacity group-hover:opacity-100"
+          style={{ maskImage, WebkitMaskImage: maskImage }}
+        />
 
-      <div className="relative z-10 flex flex-col h-full pointer-events-none" style={{ transform: "translateZ(50px)" }}>
-        <div className="flex items-start justify-between mb-8">
-          <div className="space-y-4">
-            <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${category.accent} border border-white/10 flex items-center justify-center text-white shadow-2xl`}>
+        <div className="relative z-10">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-zinc-900 shadow-2xl transition-transform group-hover:scale-110 duration-300">
               {category.icon}
             </div>
-            <div>
-              <h3 className="text-3xl font-bold tracking-tighter text-white font-[family-name:var(--font-space-grotesk)]">
-                {category.title}
-              </h3>
-              <p className="mt-2 text-sm text-zinc-500 font-[family-name:var(--font-outfit)] leading-relaxed max-w-[240px]">
-                {category.description}
-              </p>
-            </div>
+            <h3 className="text-2xl font-bold text-white tracking-tight">{category.title}</h3>
           </div>
+          <p className="text-sm text-zinc-400 leading-relaxed mb-10 font-medium">
+            {category.description}
+          </p>
         </div>
 
-        <div className="mt-auto flex flex-wrap gap-3 pointer-events-auto">
+        <div className="relative z-10 flex flex-wrap gap-2">
           {category.skills.map((skill) => (
-            <motion.div 
-              key={skill.name} 
-              whileHover={{ y: -5, scale: 1.1, backgroundColor: "rgba(255,255,255,0.08)" }}
-              className="flex items-center gap-3 px-4 py-2 rounded-xl bg-white/5 border border-white/5 hover:border-white/20 transition-all cursor-crosshair group/item"
+            <div
+              key={skill.name}
+              className="flex items-center gap-2 rounded-xl border border-white/5 bg-white/2 px-3 py-2 transition-all hover:bg-white/[0.1] hover:border-white/20"
             >
-              <img src={getIconUrl(skill.slug)} alt={skill.name} className="w-5 h-5 opacity-40 grayscale group-hover/item:opacity-100 group-hover/item:grayscale-0 transition-all duration-300" />
-              <span className="text-xs font-bold uppercase tracking-widest text-zinc-500 group-hover/item:text-white transition-colors">{skill.name}</span>
-            </motion.div>
+              <img
+                src={getIconUrl(skill.slug)}
+                alt={skill.name}
+                className="h-4 w-4 brightness-200 grayscale opacity-70 group-hover:opacity-100 transition-all duration-300"
+                onError={(e) => (e.currentTarget.style.display = 'none')}
+              />
+              <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 group-hover:text-white">
+                {skill.name}
+              </span>
+            </div>
           ))}
         </div>
       </div>
-    </motion.div>
+    </BackgroundGradient>
   );
 };
 
 export default function Skills() {
-  const sectionRef = useRef(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef });
-  
-  // Parallax movement for background elements
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, -200]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, -400]);
-
   return (
-    <section ref={sectionRef} id="skills" className="relative py-40 bg-black overflow-hidden scroll-mt-20">
-      {/* Parallax Floating Layer */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <motion.div style={{ y: y1 }} className="absolute inset-0">
-          <FloatingObject size="300px" top="10%" left="5%" color="#3b82f6" duration={8} delay={0} />
-          <FloatingObject size="250px" top="60%" left="80%" color="#a855f7" duration={10} delay={1} />
-        </motion.div>
-        <motion.div style={{ y: y2 }} className="absolute inset-0">
-          <FloatingObject size="200px" top="40%" left="40%" color="#ec4899" duration={12} delay={2} />
-          <FloatingObject size="350px" top="80%" left="15%" color="#f59e0b" duration={15} delay={0.5} />
-        </motion.div>
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-[100px]" />
-        <div className="absolute inset-0 bg-[radial-gradient(#ffffff05_1px,transparent_1px)] [background-size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_80%)]" />
-      </div>
+    <section
+      id="skills"
+      className="relative bg-black py-32 overflow-hidden font-[family-name:var(--font-space-grotesk)]"
+    >
+      <div className="absolute inset-0 z-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:60px_60px]" />
 
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-        <div className="flex flex-col md:flex-row items-end justify-between mb-24 gap-8">
-          <motion.div initial={{ opacity: 0, x: -50 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-            <div className="flex items-center gap-2 mb-4 text-emerald-500 font-bold tracking-[0.3em] uppercase text-[10px]">
-              <div className="h-1 w-8 bg-emerald-500" />
-              Expertise
-            </div>
-            <h2 className="text-6xl md:text-8xl font-black tracking-tighter text-white font-[family-name:var(--font-space-grotesk)] leading-[0.85]">
-              My Digital <br /> <span className="text-zinc-700">Toolbox.</span>
+      <div className="container relative z-10 mx-auto px-6">
+        <div className="mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="text-5xl md:text-6xl font-black tracking-tighter text-white mb-6 leading-[0.8]">
+              Skills
             </h2>
+            <p className="text-zinc-500 text-xl max-w-lg leading-relaxed font-medium">
+              Technical proficiencies in building scalable systems and interactive interfaces.
+            </p>
           </motion.div>
-          <motion.p initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="text-zinc-500 text-lg font-[family-name:var(--font-outfit)] max-w-sm text-right leading-relaxed">
-            A collection of modern tools and technologies I use to turn complex problems into elegant solutions.
-          </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 auto-rows-[minmax(350px,auto)] gap-8 perspective-1000">
-          {skillCategories.map((cat, index) => (
-            <SkillCard key={index} category={cat} />
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {skillCategories.map((category, i) => (
+            <SkillCard key={i} category={category} />
           ))}
         </div>
       </div>

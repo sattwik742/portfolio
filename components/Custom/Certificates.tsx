@@ -3,7 +3,7 @@
 import React from "react";
 import { motion, useMotionValue, useMotionTemplate } from "framer-motion";
 import { ExternalLink, Award, ShieldCheck } from "lucide-react";
-import { SiGoogle, SiHackerrank, SiCss } from "react-icons/si";
+import { SiGoogle, SiHackerrank } from "react-icons/si";
 
 const certificates = [
   {
@@ -26,10 +26,10 @@ const certificates = [
     description: "Expertise in complex queries, relational logic, and database aggregation."
   },
   {
-    title: "Modern CSS Architecture",
+    title: "CSS (Basic) Mastery",
     issuer: "HackerRank",
     date: "Dec 2024",
-    icon: <SiCss className="w-5 h-5" />,
+    icon: <SiHackerrank className="w-5 h-5" />,
     accent: "#264de4",
     link: "https://www.hackerrank.com/certificates/fb11cbbd3c44",
     description: "Advanced layout modeling including Grid, Flexbox, and Inheritance."
@@ -126,16 +126,13 @@ export default function Certificates() {
   return (
     <section id="certificates" className="relative py-40 bg-black overflow-hidden scroll-mt-20">
       {/* Background Spatial Effects */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 left-1/4 w-125 h-125 bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-125 h-125 bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <header className="mb-24 space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-zinc-500 text-[10px] font-bold tracking-[0.2em] uppercase">
-            Achievements
-          </div>
-          <h2 className="text-6xl md:text-8xl font-black tracking-tighter text-white font-[family-name:var(--font-space-grotesk)] leading-[0.85]">
-            Professional <br /> <span className="text-zinc-800">Validation.</span>
+          <h2 className="text-5xl md:text-6xl font-black tracking-tighter text-white font-space-grotesk leading-[0.85]">
+            Certificates
           </h2>
         </header>
 
