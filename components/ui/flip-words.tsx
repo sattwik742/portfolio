@@ -1,58 +1,43 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 export const FlipWords = ({
   words,
-  duration = 3000,
+  duration = 2500,
   className,
 }: {
   words: string[];
   duration?: number;
   className?: string;
 }) => {
-  const [currentWord, setCurrentWord] = useState(words[0]);
-  const [isAnimating, setIsAnimating] = useState<boolean>(false);
-
-  const startAnimation = useCallback(() => {
-    const word = words[words.indexOf(currentWord) + 1] || words[0];
-    setCurrentWord(word);
-    setIsAnimating(true);
-  }, [currentWord, words]);
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    if (!isAnimating)
-      setTimeout(() => {
-        startAnimation();
-      }, duration);
-  }, [isAnimating, duration, startAnimation]);
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % words.length);
+    }, duration);
+    return () => clearInterval(interval);
+  }, [words.length, duration]);
 
   return (
-    <AnimatePresence
-      onExitComplete={() => {
-        setIsAnimating(false);
-      }}
-    >
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: "easeInOut", type: "spring", stiffness: 100, damping: 10 }}
-        exit={{ opacity: 0, y: -40, x: 40, filter: "blur(8px)", scale: 2, position: "absolute" }}
-        className={`z-10 inline-block relative text-left px-2 ${className}`}
-        key={currentWord}
-      >
-        {currentWord.split("").map((letter, index) => (
-          <motion.span
-            key={currentWord + index}
-            initial={{ opacity: 0, y: 10, filter: "blur(8px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ delay: index * 0.08, duration: 0.4 }}
-            className="inline-block"
-          >
-            {letter}
-          </motion.span>
-        ))}
-      </motion.div>
-    </AnimatePresence>
+    <div className="relative inline-block min-w-[140px] text-left">
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={words[index]}
+          initial={{ opacity: 0, y: 10, filter: "blur(4px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          exit={{ opacity: 0, y: -10, filter: "blur(4px)" }}
+          transition={{ 
+            duration: 0.4, 
+            ease: [0.23, 1, 0.32, 1] 
+          }}
+          style={{ willChange: "transform, opacity, filter" }}
+          className={`inline-block ${className}`}
+        >
+          {words[index]}
+        </motion.span>
+      </AnimatePresence>
+    </div>
   );
 };
